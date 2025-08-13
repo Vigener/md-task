@@ -1,2 +1,3 @@
-- [ ] my first task
+- [x] my first task
 - [ ] another task
+- [ ] test task
