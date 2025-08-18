@@ -1,0 +1,38 @@
+{
+    "name": "Rust Sandbox on Dev Container",
+    // プロジェクトルートのDockerfileを使用
+    "dockerFile": "../Dockerfile",
+
+    // コンテナ起動後の作業ディレクトリ
+    "workspaceFolder": "/usr/src/app",
+
+    // コンテナ内でのユーザー設定
+    "remoteUser": "root",
+
+    // VSCode拡張機能を自動インストール
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-azuretools.vscode-docker",
+                "rust-lang.rust-analyzer",
+                "vadimcn.vscode-lldb",
+                "tamasfe.even-better-toml",
+                "fill-labs.dependi",
+                "Swellaby.vscode-rust-test-adapter",
+                "JScearcy.rust-doc-viewer"
+            ]
+        }
+    },
+
+    // フォワードするポート（必要に応じて）
+    "forwardPorts": [],
+
+    // コンテナ作成後に実行するコマンド
+    "postCreateCommand": "rustc --version && cargo --version",
+
+    // マウント設定
+    "mounts": [
+        // Cargo レジストリをキャッシュ
+        "source=cargo-cache,target=/usr/local/cargo/registry,type=volume"
+    ]
+}

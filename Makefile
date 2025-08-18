@@ -1,4 +1,4 @@
-.PHONY: install setup test clean dev-install reset
+.PHONY: install setup test clean dev-install reset lint format watch coverage audit security-check
 
 # ローカルインストール（開発用）
 install:
@@ -45,3 +45,36 @@ test-verbose:
     @echo "Testing verbose mode..."
     MD_TASK_VERBOSE=1 cargo run -- add "Verbose test"
     MD_TASK_VERBOSE=1 cargo run -- list
+
+# リント実行
+lint:
+    @echo "=== Running linting checks ==="
+    cargo clippy -- -D warnings
+    @echo "✅ Linting passed"
+
+# フォーマット適用
+format:
+    @echo "=== Formatting code ==="
+    cargo fmt --all
+    @echo "✅ Formatting complete"
+
+# テスト監視（ファイル変更時に自動テスト）
+watch:
+    @echo "=== Watching for changes and running tests ==="
+    cargo watch -x 'test -- --nocapture'
+
+# テストカバレッジ計測
+coverage:
+    @echo "=== Generating test coverage report ==="
+    cargo tarpaulin --out Html
+    @echo "✅ Coverage report generated"
+
+# 依存関係の脆弱性チェック
+audit:
+    @echo "=== Checking dependencies for vulnerabilities ==="
+    cargo audit
+    @echo "✅ Security audit complete"
+
+# ビルドとセキュリティチェックを実行
+security-check: audit lint
+    @echo "=== Security checks completed ==="

@@ -1,0 +1,11 @@
+// 推奨拡張機能
+{
+    "recommendations": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "serayuzgur.crates",
+        "vadimcn.vscode-lldb",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+    ]
+}

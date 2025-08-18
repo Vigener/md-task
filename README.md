@@ -21,7 +21,7 @@
 
 効率的な操作のため、各コマンドには短縮形が用意されています：
 - `add` → `a`
-- `list` → `ls`  
+- `list` → `ls`
 - `done` → `d`
 - `remove` → `rm`
 - `archive` → `arc`
@@ -179,6 +179,26 @@ make test-verbose
 make clean
 ```
 
+## テストの実行
+
+```bash
+# すべてのテストを実行
+cargo test
+
+# 特定のテストのみ実行
+cargo test config  # 設定関連のテストのみ実行
+cargo test task    # タスク管理関連のテストのみ実行
+
+# テスト実行時の詳細出力を見る
+cargo test -- --nocapture
+```
+
+### テスト環境を充実させることのメリット
+
+- 機能変更後も既存機能が壊れていないことを確認できる
+- 新機能開発時にテストを先に書くことで要件を明確にできる（TDD）
+- バグ修正時に再発防止のためのテストを追加できる
+
 ### 環境変数
 
 - `MD_TASK_DEV=1`: 開発モード（`./dev-config/config.toml`を使用）
@@ -203,7 +223,7 @@ src/
 ./dev-config/config.toml     # 開発用グローバル設定
 ./md-task.toml              # ローカル設定
 
-# 本番環境  
+# 本番環境
 ~/.config/md-task/config.toml   # ユーザーグローバル設定
 ./md-task.toml                  # プロジェクト設定
 ```
@@ -247,3 +267,176 @@ src/
 - 開発環境の整備（Makefile、環境変数管理）
 - サイレント/Verboseモードの実装
 - モジュール分割によるコード整理
+
+## 勉強用メモ
+
+### 開発環境向上ガイド（初心者向け）
+
+ここでは、md-taskプロジェクトのための開発環境改善について、各項目ごとにどこにどのファイルを配置し、どのように使うかを説明します。
+
+### 1. テスト環境の充実
+
+#### ファイルの配置
+
+1. **プロジェクトルートに `tests` ディレクトリを作成**
+2. その中に以下のファイルを配置:
+   - `tests/config_test.rs` - 設定関連のテスト
+   - `tests/task_test.rs` - タスク管理機能のテスト
+
+#### 使い方
+
+```bash
+# すべてのテストを実行
+cargo test
+
+# 特定のテストのみ実行
+cargo test config  # 設定関連のテストのみ実行
+cargo test task    # タスク管理関連のテストのみ実行
+
+# テスト実行時の詳細出力を見る
+cargo test -- --nocapture
+```
+
+#### メリット
+
+- 機能変更後も既存機能が壊れていないことを確認できる
+- 新機能開発時にテストを先に書くことで要件を明確にできる（TDD）
+- バグ修正時に再発防止のためのテストを追加できる
+
+### 2. CI/CD パイプラインの導入
+
+#### ファイルの配置
+
+1. **プロジェクトルートに `.github/workflows` ディレクトリを作成**
+2. その中に以下のファイルを配置:
+   - `.github/workflows/rust.yml` - テスト・ビルド・リントを自動実行
+   - `.github/workflows/release.yml` - リリース時のビルド自動化
+
+#### 使い方
+
+特別な操作は不要です。GitHub上で以下のタイミングで自動実行されます：
+
+- `rust.yml`: mainブランチへのプッシュ時やプルリクエスト作成/更新時
+- `release.yml`: `v*` (例: v0.1.0)形式のタグをプッシュした時
+
+リリースを作成する場合:
+
+```bash
+# タグを作成してプッシュ
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+#### メリット
+
+- コードの変更が自動的にテストされる
+- フォーマットやリントエラーを早期に発見できる
+- リリース作業が自動化され、ミスを防止できる
+
+### 3. コード品質管理ツールの設定
+
+#### ファイルの配置
+
+プロジェクトルートに以下のファイルを配置:
+- `rustfmt.toml` - Rustコードフォーマッタの設定
+- `.clippy.toml` - Rustの静的解析ツールClippyの設定
+
+#### 使い方
+
+```bash
+# コードのフォーマット
+cargo fmt
+
+# コードの静的解析
+cargo clippy
+
+# ビルド前に両方実行
+cargo fmt && cargo clippy && cargo build
+```
+
+Makefileに追加すると便利:
+
+```bash
+# フォーマット
+make format
+
+# 静的解析
+make lint
+```
+
+#### メリット
+
+- コードスタイルの一貫性が保たれる
+- 潜在的なバグやパフォーマンス問題を早期発見できる
+- コードレビューが効率化される
+
+### 4. 効率的な開発環境の設定
+
+#### ファイルの配置
+
+1. **VS Code設定**
+   - `.vscode/settings.json` - プロジェクト固有のエディタ設定
+   - `.vscode/extensions.json` - 推奨拡張機能リスト
+
+2. **開発コンテナ設定**
+   - `.devcontainer/Dockerfile` - 開発環境のコンテナ定義
+   - `.devcontainer/devcontainer.json` - 開発コンテナの設定
+
+3. **GitHub Copilot用の指示ファイル**
+   - `.vscode/copilot-chat/instructions.md` - AIアシスタントへの指示
+
+#### 使い方
+
+**VS Code設定**:
+- VS Codeでプロジェクトを開くと自動的に設定が適用されます
+- 推奨拡張機能のインストールを促すポップアップが表示されます
+
+**開発コンテナ**:
+1. VS Codeに「Remote - Containers」拡張機能をインストール
+2. コマンドパレット(F1)から「Remote-Containers: Open Folder in Container」を選択
+3. プロジェクトフォルダを選択
+
+**Copilot指示ファイル**:
+- GitHub Copilot Chat拡張機能がインストールされていれば自動的に読み込まれます
+- Copilotとのチャットでプロジェクト固有の知識が反映されます
+
+#### メリット
+
+- チーム全体で一貫した開発環境を共有できる
+- 新メンバーが素早く開発を始められる
+- 環境依存の問題を減らせる
+
+### 実践的な使い方：開発サイクル例
+
+初心者向けの典型的な開発フローは次のようになります：
+
+1. **機能開発前**:
+   ```bash
+   git checkout -b feature/new-feature  # 新しいブランチを作成
+   ```
+
+2. **テストを書く**:
+   ```bash
+   # tests/new_feature_test.rs を作成
+   cargo test  # テストを実行（この時点では失敗するはず）
+   ```
+
+3. **機能を実装**:
+   ```bash
+   # 機能を実装
+   cargo fmt  # コードをフォーマット
+   cargo clippy  # 静的解析
+   cargo test  # テストが通るか確認
+   ```
+
+4. **コミットとプッシュ**:
+   ```bash
+   git add .
+   git commit -m "feat: 新機能の実装"
+   git push origin feature/new-feature
+   ```
+
+5. **GitHub上でプルリクエストを作成**
+   - CI/CDが自動的に実行され、テストやリントが通るか確認されます
+
+これらの開発環境改善により、コードの品質を維持しながら、効率的に開発を進めることができます。
