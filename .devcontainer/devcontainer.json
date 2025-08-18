@@ -19,7 +19,8 @@
                 "tamasfe.even-better-toml",
                 "fill-labs.dependi",
                 "Swellaby.vscode-rust-test-adapter",
-                "JScearcy.rust-doc-viewer"
+                "JScearcy.rust-doc-viewer",
+                "oderwat.indent-rainbow"
             ]
         }
     },
