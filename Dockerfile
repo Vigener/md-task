@@ -16,7 +16,7 @@ ENV LC_ALL=ja_JP.UTF-8
 # --- ▲▲▲ ここまでロケール設定を追加 ▲▲▲ ---
 
 # 関連するコマンドを一つのRUN命令にまとめる
-RUN apt-get update && apt-get install -y zsh git curl \
+RUN apt-get update && apt-get install -y zsh git curl make \
     # Oh My Zshを非対話形式でインストールし、成功した場合のみ次に進む
     && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" \
     # プラグインをクローン
@@ -29,6 +29,9 @@ RUN apt-get update && apt-get install -y zsh git curl \
 
 # コンテナ内での作業ディレクトリを指定
 WORKDIR /usr/src/app
+
+# Rustの開発ツールをインストール
+RUN rustup component add rustfmt clippy
 
 # このコマンドでコンテナを起動し続ける (開発用に重要)
 CMD ["tail", "-f", "/dev/null"]

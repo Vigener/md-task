@@ -1,9 +1,11 @@
 ## タスク一覧
 
-- [ ] 🟢 ローカル設定テスト
-- [ ] 🟡 Installation test
-- [ ] 🟡 Silent test
-- [ ] 🟡 Verbose test
-- [ ] 🟡 Environment variable test
-- [ ] 🟡 Production test
-- [ ] 🟡 Slient test
+- [ ] 🟡 重要な未完了タスク
+- [ ] 🟡 通常の未完了タスク
+
+## アーカイブ
+
+- [x] 🟡 完了済みタスク1
+- [x] 🟡 完了済みタスク2
+- [x] 🟡 完了済みタスク3
+- [x] 🟡 既存のアーカイブタスク
