@@ -131,7 +131,7 @@ fn main() -> std::io::Result<()> {
                 let mut in_archive_section = false;
 
                 reader.lines()
-                    .filter_map(Result::ok) // エラーのない行だけを取り出す
+                    .map_while(Result::ok) // エラーのない行だけを取り出す
                     .for_each(|line| {
                         // アーカイブセクションの開始を検知
                         if line == "## アーカイブ" {
@@ -168,7 +168,7 @@ fn main() -> std::io::Result<()> {
                 // 未完了タスクのみ表示（従来の動作）
                 println!("--- Tasks ---");
                 reader.lines()
-                    .filter_map(Result::ok) // エラーのない行だけを取り出す
+                    .map_while(Result::ok) // エラーのない行だけを取り出す
                     .filter(|line| line.starts_with("- [ ]")) // 未完了タスクのみをフィルタリング
                     .enumerate() // 行番号を付ける
                     .for_each(|(index, task_line)| {

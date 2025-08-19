@@ -38,9 +38,9 @@ task_file = "test-tasks.md"
 
     // 設定値を検証
     assert_eq!(config.task_management.default_priority, "high");
-    assert_eq!(config.task_management.auto_format, false);
-    assert_eq!(config.task_management.allow_incomplete_in_archive, true);
-    assert_eq!(config.display.show_completed_by_default, true);
+    assert!(!config.task_management.auto_format);
+    assert!(config.task_management.allow_incomplete_in_archive);
+    assert!(config.display.show_completed_by_default);
     assert_eq!(config.file_paths.task_file, "test-tasks.md");
 
     // テスト後に元のディレクトリに戻す

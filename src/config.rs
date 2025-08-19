@@ -44,6 +44,7 @@ impl Default for Config {
 }
 
 // 設定ディレクトリを取得（開発環境を考慮）
+#[allow(dead_code)]
 pub fn get_config_dir() -> PathBuf {
     // 1. 開発環境チェック（環境変数 MD_TASK_DEV が設定されている場合）
     if std::env::var("MD_TASK_DEV").is_ok() {
@@ -61,6 +62,7 @@ pub fn get_config_dir() -> PathBuf {
     }
 }
 
+#[allow(dead_code)]
 fn load_config_from_file(path: &PathBuf) -> Option<Config> {
     if let Ok(contents) = std::fs::read_to_string(path) {
         toml::from_str(&contents).ok()
@@ -69,6 +71,7 @@ fn load_config_from_file(path: &PathBuf) -> Option<Config> {
     }
 }
 
+#[allow(dead_code)]
 fn get_config_search_paths() -> Vec<PathBuf> {
     let mut paths = vec![
         // 1. カレントディレクトリのローカル設定（最優先）
@@ -90,6 +93,7 @@ fn get_config_search_paths() -> Vec<PathBuf> {
     paths
 }
 
+#[allow(dead_code)]
 fn find_project_root() -> Option<PathBuf> {
     let mut current = std::env::current_dir().ok()?;
 
@@ -106,10 +110,12 @@ fn find_project_root() -> Option<PathBuf> {
     None
 }
 
+#[allow(dead_code)]
 fn is_verbose() -> bool {
     std::env::var("MD_TASK_VERBOSE").is_ok() || std::env::var("MD_TASK_DEBUG").is_ok()
 }
 
+#[allow(dead_code)]
 pub fn load_config() -> Config {
     let mut config = Config::default();
     let search_paths = get_config_search_paths();
@@ -137,6 +143,7 @@ pub fn load_config() -> Config {
     config
 }
 
+#[allow(dead_code)]
 fn merge_configs(base: &mut Config, override_config: Config) {
     // 各フィールドをローカル設定で上書き
     base.task_management = override_config.task_management;
@@ -144,6 +151,7 @@ fn merge_configs(base: &mut Config, override_config: Config) {
     base.file_paths = override_config.file_paths;
 }
 
+#[allow(dead_code)]
 pub fn create_local_config() -> Result<(), Box<dyn std::error::Error>> {
     let config = Config::default();
     let toml_string = toml::to_string_pretty(&config)?;
@@ -152,6 +160,7 @@ pub fn create_local_config() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+#[allow(dead_code)]
 pub fn install_global_config() -> Result<(), Box<dyn std::error::Error>> {
     let config_dir = get_config_dir();
     let config_file = config_dir.join("config.toml");
@@ -175,6 +184,7 @@ pub fn install_global_config() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+#[allow(dead_code)]
 pub fn show_config_paths() {
     let search_paths = get_config_search_paths();
 
@@ -202,6 +212,7 @@ pub fn show_config_paths() {
     }
 }
 
+#[allow(dead_code)]
 pub fn show_config_status() {
     let search_paths = get_config_search_paths();
 
