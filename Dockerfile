@@ -30,5 +30,8 @@ RUN apt-get update && apt-get install -y zsh git curl \
 # コンテナ内での作業ディレクトリを指定
 WORKDIR /usr/src/app
 
+# Rustの開発ツールをインストール
+RUN rustup component add rustfmt clippy
+
 # このコマンドでコンテナを起動し続ける (開発用に重要)
 CMD ["tail", "-f", "/dev/null"]
